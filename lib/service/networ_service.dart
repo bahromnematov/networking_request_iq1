@@ -1,23 +1,25 @@
 import 'dart:convert';
 
 import 'package:http/http.dart';
+import 'package:networking_request/model/valyuta_model.dart';
 
 import '../model/post_model.dart';
+import '../model/user_model.dart';
 
 class Network {
-  static String BASE = "jsonplaceholder.typicode.com";
+  static String BASE = "https://cbu.uz/uz/arkhiv-kursov-valyut/json/";
   static Map<String, String> headers = {
     "Content-type": "application/json; charset=UTF-8"
   };
 
-  static String apiPosts = "/comments";
-  static String apiPostCreate = "/comments";
-  static String apiUpdatePost = "/comments/";
-  static String apiDeletePost = "/comments/";
+  static String apiPosts = "";
+  static String apiPostCreate = "/users";
+  static String apiUpdatePost = "/users/";
+  static String apiDeletePost = "/users/";
 
-  static Future<String> GET(String api, Map<String, String> params) async {
-    var url = Uri.https(BASE, apiPosts, params);
-    var response = await get(url, headers: params);
+  static Future<String> GET() async {
+    var url = Uri.parse(BASE);
+    var response = await get(url);
     if (response.statusCode == 200) {
       return response.body;
     }
@@ -29,9 +31,9 @@ class Network {
     return params;
   }
 
-  static List<Post> parsePostList(String response) {
+  static List<ValyutaModel> parsePostList(String response) {
     dynamic json = jsonDecode(response);
-    var data = List<Post>.from(json.map((element) => Post.fromJson(element)));
+    var data = List<ValyutaModel>.from(json.map((element) => ValyutaModel.fromJson(element)));
     return data;
   }
 }

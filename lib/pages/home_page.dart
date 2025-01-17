@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:networking_request/service/networ_service.dart';
 
-import '../model/post_model.dart';
+import '../model/user_model.dart';
+import '../model/valyuta_model.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,14 +12,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Post> items = [];
+  List<ValyutaModel> items = [];
   var isLoading = false;
 
   void apiPostList() async {
     setState(() {
       isLoading = true;
     });
-    var response = await Network.GET(Network.apiPosts, Network.paramsEmpty());
+    var response = await Network.GET();
     setState(() {
       isLoading = false;
       items = Network.parsePostList(response);
@@ -41,27 +42,31 @@ class _HomePageState extends State<HomePage> {
           ListView.builder(
             itemBuilder: (ctx, index) {
               return Card(
-                child: ListTile(
-                  title: Text(
-                    items[index].email,
+                  child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    items[index].ccyNmUz,
                     style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700),
-                  ),
-                  subtitle: Text(
-                    items[index].body,
-                    style: TextStyle(color: Colors.grey, fontSize: 16),
-                  ),
-                  leading: Text(
-                    items[index].id.toString(),
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
+                        color: Colors.blue,
+                        fontSize: 19,
                         fontWeight: FontWeight.bold),
                   ),
-                ),
-              );
+                  Text(items[index].nominal),
+                  Text(
+                    items[index].rate,
+                    style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    items[index].date.toString(),
+                    style: TextStyle(
+                        color: Colors.orange, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ));
             },
             itemCount: items.length,
           ),
